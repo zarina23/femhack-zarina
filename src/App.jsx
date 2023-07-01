@@ -1,68 +1,81 @@
 import { useEffect, useState, useMemo } from "react";
 import {
-  LineChart,
-  Line,
+  ScatterChart,
+  Scatter,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
+  ZAxis,
 } from "recharts";
 import "./App.css";
 
 function App() {
-  const [userDataByYear, setUserDataByYear] = useState([]);
   const startYear = 1990;
   const endYear = 2020;
+  const [userDataByYear, setUserDataByYear] = useState([]);
+  const [currentYear, setCurrentYear] = useState(startYear);
 
-  //on page load call the function that fetches data from the backend
   useEffect(() => {
     getUsersAllYears();
   }, []);
 
   const getUsersAllYears = async () => {
-    //create a array to push the promises to
     const promiseList = [];
 
-    //loop through all years available in the database
     for (let year = startYear; year <= endYear; year++) {
-      //push each year's fetch responses into the array
       promiseList.push(fetch(`api/internet-users/${year}`));
     }
 
-    //get responses from the promises and turn them into json format
     const responses = await Promise.all(promiseList);
     const data = await Promise.all(
       responses.map((response) => response.json())
     );
 
-    console.log(data);
-
-    //clean the data array to turn it into the necessary format and set state
     const formattedData = data.map((usersPerYear) => {
       const year = usersPerYear.Message.slice(-4);
       const total = usersPerYear.Data.Total;
 
-      return { name: [year], "Total Users": total };
-
-    //   name: "Page G",
-    // uv: 3490,
-    // pv: 4300,
-    // amt: 2100
+      return { name: [year], total: total };
     });
+
+    console.log(formattedData);
+
     setUserDataByYear(formattedData);
   };
 
   useEffect(() => {
-    console.log(userDataByYear);
-  }, [userDataByYear]);
+    const interval = setInterval(() => {
+      setCurrentYear((prevYear) => {
+        const nextYear = prevYear + 1;
+        if (nextYear > endYear) {
+          clearInterval(interval);
+        }
+        return nextYear;
+      });
+    }, 150);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const chartData = useMemo(() => {
+    return userDataByYear.filter(
+      (data) => parseInt(data.name[0]) <= currentYear
+    );
+  }, [userDataByYear, currentYear]);
+
+  const yAxisFormatter = (value) => {
+    return `${(value / 1000000).toFixed(0)} M`;
+  };
 
   return (
     <>
-      <LineChart
+      <ScatterChart
         width={500}
         height={300}
-        data={userDataByYear}
         margin={{
           top: 5,
           right: 30,
@@ -71,17 +84,34 @@ function App() {
         }}
       >
         <CartesianGrid stroke="#7F7C82" strokeDasharray="2 2" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line
-          type="monotone"
-          dataKey="Total Users"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
+        <XAxis
+          type="number"
+          dataKey="name"
+          name="Year"
+          domain={[startYear, endYear]}
         />
-      </LineChart>
+        <YAxis
+          type="number"
+          dataKey="total"
+          name="Total Users"
+          tickFormatter={yAxisFormatter}
+        />
+
+        <ZAxis
+          dataKey="total"
+          range={[50, 500]}
+          name="Total Users"
+          unit="users"
+        />
+        <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+        <Legend />
+        <Scatter
+          name="Total Users"
+          data={chartData}
+          fill="#8884d8"
+          shape="circle"
+        />
+      </ScatterChart>
     </>
   );
 }
