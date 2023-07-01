@@ -1,0 +1,28 @@
+.scatterChartSection {
+  display: flex;
+  justify-content: center;
+}
+
+.chartContainer {
+  background-color: #262626;
+
+  display: flex;
+  justify-content: center;
+  width: 700px;
+  padding: 40px;
+  /* margin-left: 400px;
+  margin-right: 400px; */
+}
+
+.custom-tooltip {
+  border: 1px solid #cdc2d9;
+  border-radius: 5px;
+  background-color: rgba(15, 144, 254, 0.75);
+  padding: 10px;
+
+  color: #f3f1f5;
+}
+
+p {
+  margin: 0px;
+}

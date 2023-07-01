@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   ZAxis,
+  ResponsiveContainer,
 } from "recharts";
 import "./App.css";
 
@@ -54,7 +55,7 @@ function App() {
         }
         return nextYear;
       });
-    }, 150);
+    }, 120);
 
     return () => {
       clearInterval(interval);
@@ -71,47 +72,87 @@ function App() {
     return `${(value / 1000000).toFixed(0)} M`;
   };
 
+  const customTooltipContent = ({ active, payload, label }) => {
+    console.log(payload);
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${payload[0].name}: ${payload[0].value}`}</p>
+          <p className="desc">{`${payload[1].name}: ${(
+            payload[1].value / 1000000
+          ).toFixed(0)} M`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <>
-      <ScatterChart
-        width={500}
-        height={300}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid stroke="#7F7C82" strokeDasharray="2 2" />
-        <XAxis
-          type="number"
-          dataKey="name"
-          name="Year"
-          domain={[startYear, endYear]}
-        />
-        <YAxis
-          type="number"
-          dataKey="total"
-          name="Total Users"
-          tickFormatter={yAxisFormatter}
-        />
+      <section className="scatterChartSection">
+        <div className="chartContainer">
+          <ScatterChart
+            className="scatterChart"
+            width={630}
+            height={370}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 20,
+            }}
+          >
+            <CartesianGrid stroke="#ffffff" strokeDasharray="2 2" />
+            <XAxis
+              type="number"
+              dataKey="name"
+              name="Year"
+              domain={[startYear, endYear + 1]}
+              tickCount={8}
+              allowDuplicatedCategory={false}
+              wrapperStyle={{ lineHeight: "40px" }}
+              tick={{ fill: "#f3f1f5" }}
+              axisLine={{ stroke: "#f3f1f5" }}
+            />
+            <YAxis
+              type="number"
+              dataKey="total"
+              name="Total Users"
+              domain={[0, 5000000000]}
+              tickFormatter={yAxisFormatter}
+              tickCount={6}
+              tick={{ fill: "#f3f1f5" }}
+              axisLine={{ stroke: "#f3f1f5" }}
+            />
 
-        <ZAxis
-          dataKey="total"
-          range={[50, 500]}
-          name="Total Users"
-          unit="users"
-        />
-        <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-        <Legend />
-        <Scatter
-          name="Total Users"
-          data={chartData}
-          fill="#8884d8"
-          shape="circle"
-        />
-      </ScatterChart>
+            <ZAxis
+              dataKey="total"
+              range={[100, 750]}
+              name="total"
+              unit=" users"
+            />
+            <Tooltip
+              cursor={{ strokeDasharray: "3 3" }}
+              animationEasing="linear"
+              content={customTooltipContent}
+              // formatter={(value, name, props) => [value/1000000, name]}
+            />
+            <Legend
+              fill="#0f90fe"
+              opacity={1}
+              wrapperStyle={{ lineHeight: "30px" }}
+            />
+            <Scatter
+              name="Total Users Worldwide"
+              data={chartData}
+              fill="#0f90fe"
+              opacity={0.9}
+              shape="circle"
+            />
+          </ScatterChart>
+        </div>
+      </section>
     </>
   );
 }
