@@ -1,15 +1,21 @@
 import { useEffect, useState, useMemo } from "react";
 import ChartByYear from "./components/ChartByYear";
+import ChartByYearAndCountry from "./components/ChartByYearAndCountry";
 import "./App.css";
 
 function App() {
+  //state for first chart
   const startYear = 1990;
   const endYear = 2020;
   const [userDataByYear, setUserDataByYear] = useState([]);
   const [currentYear, setCurrentYear] = useState(startYear);
+  //state for second chart
+  const [countriesList, setCountriesList] = useState([]);
 
+  //code for the first chart - total users per year
   useEffect(() => {
     getUsersAllYears();
+    getCountries();
   }, []);
 
   const getUsersAllYears = async () => {
@@ -56,9 +62,23 @@ function App() {
     );
   }, [userDataByYear, currentYear]);
 
+  //code for the second chart - users per year by country
+  //API call to get the list of countries
+  const getCountries = async () => {
+    try {
+      const response = await fetch("api/countries");
+      const data = await response.json();
+
+      //set state with fetched data
+      setCountriesList(data.Countries)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
-      <section className="scatterChartSection">
+      <section className="chartByYear">
         <div className="chartContainer">
           <ChartByYear
             chartData={chartData}
@@ -67,6 +87,11 @@ function App() {
             setCurrentYear={setCurrentYear}
           />
         </div>
+      </section>
+
+      <section className="chartByYearAndCountry">
+        {/* {countriesList.map(country => <p>{country}</p>)} */}
+        <ChartByYearAndCountry countriesList={countriesList}/>
       </section>
     </>
   );
