@@ -12,12 +12,12 @@ function App() {
   //state for second chart
   const [countriesList, setCountriesList] = useState([]);
 
-  //code for the first chart - total users per year
   useEffect(() => {
     getUsersAllYears();
     getCountries();
   }, []);
 
+  //code for the first chart - total users per year
   const getUsersAllYears = async () => {
     const promiseList = [];
 
@@ -70,7 +70,7 @@ function App() {
       const data = await response.json();
 
       //set state with fetched data
-      setCountriesList(data.Countries)
+      setCountriesList(data.Countries);
     } catch (err) {
       console.log(err);
     }
@@ -91,7 +91,7 @@ function App() {
 
       <section className="chartByYearAndCountry">
         {/* {countriesList.map(country => <p>{country}</p>)} */}
-        <ChartByYearAndCountry countriesList={countriesList}/>
+        <ChartByYearAndCountry countriesList={countriesList} />
       </section>
     </div>
   );
