@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./ChartByYearAndCountry.css";
 
 export default function ChartByYearAndCountry({ countriesList }) {
   const [text, setText] = useState("");
@@ -19,6 +20,12 @@ export default function ChartByYearAndCountry({ countriesList }) {
     setText(text);
   };
 
+  const onSuggestHandler = (suggestion) => {
+    console.log(suggestion);
+    setText(suggestion);
+    setSuggestions([]);
+  };
+
   return (
     <div>
       <div className="container">
@@ -27,8 +34,22 @@ export default function ChartByYearAndCountry({ countriesList }) {
           className="col-md-12 input"
           onChange={(e) => onChangeHandler(e.target.value)}
           value={text}
+          onBlur={() => {
+            setTimeout(() => {
+              setSuggestions([]);
+            }, 200);
+          }}
         />
-        {text}
+        {suggestions &&
+          suggestions.map((suggestion, i) => (
+            <div
+              key={i}
+              className="suggestion col-md-12 justify-content-md-center"
+              onClick={() => onSuggestHandler(suggestion)}
+            >
+              {suggestion}
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -1,6 +1,15 @@
+/* App */
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ChartByYear Component */
 .chartByYear {
   display: flex;
   justify-content: center;
+  margin-bottom: 40px;
 }
 
 .chartContainer {

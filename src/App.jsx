@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import ChartByYear from "./components/ChartByYear";
-import ChartByYearAndCountry from "./components/ChartByYearAndCountry";
+import ChartByYearAndCountry from "./components/ChartByYearAndCountry/ChartByYearAndCountry";
 import "./App.css";
 
 function App() {
@@ -77,7 +77,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="App">
       <section className="chartByYear">
         <div className="chartContainer">
           <ChartByYear
@@ -93,7 +93,7 @@ function App() {
         {/* {countriesList.map(country => <p>{country}</p>)} */}
         <ChartByYearAndCountry countriesList={countriesList}/>
       </section>
-    </>
+    </div>
   );
 }
 
