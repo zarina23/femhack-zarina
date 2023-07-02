@@ -25,6 +25,22 @@ function App() {
     getCountries();
   }, []);
 
+  const minAndMaxArray = useMemo(() => {
+    let min = mapData?.[0]?.internetUsers2020;
+    let max = mapData?.[0]?.internetUsers2020;
+
+    for (let i = 1; i < mapData.length; i++) {
+
+      if (mapData[i].internetUsers2020 && mapData[i].internetUsers2020 < min) {
+        min = mapData[i].internetUsers2020;
+      } else if (mapData[i].internetUsers2020 && mapData[i].internetUsers2020 > max) {
+        max = mapData[i].internetUsers2020;
+      }
+
+    }
+    return [min, max]
+  }, [mapData]);
+
   //code for the first chart - total users per year
   const getUsersAllYears = async () => {
     const promiseList = [];
@@ -187,7 +203,7 @@ function App() {
         </div>{" "}
       </section>
 
-      <WorldMap mapData={mapData} />
+      <WorldMap mapData={mapData} minAndMaxArray={minAndMaxArray}/>
     </div>
   );
 }

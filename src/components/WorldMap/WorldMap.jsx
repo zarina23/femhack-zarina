@@ -10,13 +10,12 @@ import {
 } from "react-simple-maps";
 import lookup_table from "../../../public/lookup_table.json";
 
-const WorldMap = ({ mapData }) => {
-
+const WorldMap = ({ mapData, minAndMaxArray }) => {
   const geoUrl = "../../../public/features.json";
 
   const colorScale = scaleLinear()
-    .domain([0, 10000000])
-    .range(["#ffedea", "#ff5233"]);
+    .domain(minAndMaxArray)
+    .range(["rgb(189, 224, 255)", "rgba(15, 144, 254, 1)"]);
 
   return (
     <ComposableMap
@@ -31,7 +30,6 @@ const WorldMap = ({ mapData }) => {
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => {
-              console.log({ geo });
               const extractedCountryDetails = mapData.find(
                 (countryDetails) =>
                   lookup_table[countryDetails.countryName] === geo.id
