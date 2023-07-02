@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import ChartByYear from "./components/ChartByYear";
 import ChartByYearAndCountry from "./components/ChartByYearAndCountry/ChartByYearAndCountry";
+import ChartTopTen from "./components/ChartTopTen/ChartTopTen";
 import "./App.css";
 
 function App() {
@@ -122,8 +123,8 @@ function App() {
       )
       .slice(0, 10);
 
-    console.log(topTenCountriesArray);
-    return topTenCountriesArray;
+    // console.log(topTenCountriesArray.map((country) => country.country));
+    return topTenCountriesArray.map((country) => country.country);
   };
 
   useEffect(() => {
@@ -158,13 +159,9 @@ function App() {
 
       <section className="chartByYear">
         <div className="chartContainer">
-          <ChartByYearAndCountry topTenCountriesList={topTenCountriesList} />
+          <ChartTopTen topTenCountriesList={topTenCountriesList} />
         </div>{" "}
       </section>
-
-      {topTenCountriesList?.map((country, i) => (
-        <p key={i}>{country.country}</p>
-      ))}
     </div>
   );
 }
