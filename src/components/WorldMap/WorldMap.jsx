@@ -7,6 +7,7 @@ import {
   Geography,
   Sphere,
   Graticule,
+  ZoomableGroup,
 } from "react-simple-maps";
 import lookup_table from "../../../public/lookup_table.json";
 
@@ -15,17 +16,21 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
 
   const colorScale = scaleLinear()
     .domain(minAndMaxArray)
-    .range(["rgb(189, 224, 255)", "rgba(15, 144, 254, 1)"]);
+    .range(["rgb(189, 224, 255)", "#2B6FB5"]);
 
+
+    const showTooltip = (countryDetails) => {
+      console.log(countryDetails)
+    }
   return (
     <ComposableMap
       projectionConfig={{
         rotate: [-10, 0, 0],
-        scale: 147,
+        scale: 140,
       }}
     >
-      <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
-      <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
+      <Sphere stroke="#f3f1f5" strokeWidth={0.5} />
+      <Graticule stroke="#f3f1f5" strokeWidth={0.5} />
       {mapData.length > 0 && (
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
@@ -38,11 +43,16 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill={
-                    extractedCountryDetails
-                      ? colorScale(extractedCountryDetails.internetUsers2020)
-                      : "#F5F4F6"
-                  }
+                  style={{
+                    default: {
+                      fill: extractedCountryDetails
+                        ? colorScale(extractedCountryDetails.internetUsers2020)
+                        : "#F5F4F6",
+                    },
+                    hover: { fill: "#041145" },
+                    pressed: { fill: "rgba(15, 144, 254, 1)" },
+                  }}
+                  onMouseEnter={()=>showTooltip(extractedCountryDetails)}
                 />
               );
             })

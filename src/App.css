@@ -19,9 +19,16 @@
   justify-content: center;
   width: 800px;
   padding: 40px;
-  /* margin-left: 400px;
-  margin-right: 400px; */
 }
+
+.mapContainer {
+  background-color: #262626;
+  display: flex;
+  justify-content: center;
+  width: 85vw;
+  padding: 40px;
+}
+
 
 .custom-tooltip {
   border: 1px solid #cdc2d9;

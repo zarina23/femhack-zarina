@@ -203,7 +203,11 @@ function App() {
         </div>{" "}
       </section>
 
-      <WorldMap mapData={mapData} minAndMaxArray={minAndMaxArray}/>
+      <section className="chartByYear">
+        <div className="mapContainer">
+          <WorldMap mapData={mapData} minAndMaxArray={minAndMaxArray} />
+        </div>{" "}
+      </section>
     </div>
   );
 }
