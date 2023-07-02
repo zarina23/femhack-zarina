@@ -11,6 +11,8 @@ function App() {
   const [currentYear, setCurrentYear] = useState(startYear);
   //state for second chart
   const [countriesList, setCountriesList] = useState([]);
+  //state for third chart
+  const [topTenCountriesList, setTopTenCountriesList] = useState([]);
 
   useEffect(() => {
     getUsersAllYears();
@@ -76,6 +78,65 @@ function App() {
     }
   };
 
+  //API call to get top 10 countries
+  const getTopCountries = async (countriesList) => {
+    const promiseList = [];
+
+    for (let i = 0; i < countriesList.length; i++) {
+      promiseList.push(fetch(`api/country/${countriesList[i]}`));
+    }
+
+    const responses = await Promise.all(promiseList);
+    const data = await Promise.all(
+      responses.map((response) => response.json())
+    );
+
+    const totalByCountryArray = data.map((item) => {
+      const yearsData = item.Data; // Object containing data for each year
+      const country = item.Message.replace("Data from country `", "").replace(
+        "`",
+        ""
+      ); // Extract country name
+
+      // Calculate total internet users for all years
+      const totalInternetUsers = Object.values(yearsData).reduce(
+        (total, yearData) => {
+          return total + yearData.internet_users_number;
+        },
+        0
+      );
+
+      // Create the transformed object
+      return {
+        country: country,
+        total_internet_users_all_years: totalInternetUsers,
+      };
+    });
+
+    // console.log(totalByCountryArray);
+
+    const topTenCountriesArray = totalByCountryArray
+      .sort(
+        (a, b) =>
+          b.total_internet_users_all_years - a.total_internet_users_all_years
+      )
+      .slice(0, 10);
+
+    console.log(topTenCountriesArray);
+    return topTenCountriesArray;
+  };
+
+  useEffect(() => {
+    if (countriesList.length > 0) {
+      const fetchTopCountries = async () => {
+        const topCountries = await getTopCountries(countriesList);
+        setTopTenCountriesList(topCountries);
+      };
+
+      fetchTopCountries();
+    }
+  }, [countriesList]);
+
   return (
     <div className="App">
       <section className="chartByYear">
@@ -90,10 +151,20 @@ function App() {
       </section>
 
       <section className="chartByYear">
-                <div className="chartContainer">
+        <div className="chartContainer">
+          <ChartByYearAndCountry countriesList={countriesList} />
+        </div>{" "}
+      </section>
 
-        <ChartByYearAndCountry countriesList={countriesList} />
-     </div> </section>
+      <section className="chartByYear">
+        <div className="chartContainer">
+          <ChartByYearAndCountry topTenCountriesList={topTenCountriesList} />
+        </div>{" "}
+      </section>
+
+      {topTenCountriesList?.map((country, i) => (
+        <p key={i}>{country.country}</p>
+      ))}
     </div>
   );
 }
