@@ -9,77 +9,55 @@ import {
   Legend,
 } from "recharts";
 import "./ChartByYearAndCountry.css";
+import "../../App.css";
 
 export default function ChartByYearAndCountry({ countriesList }) {
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [selectedYear, setSelectedYear] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
 
   const [selectedOption, setSelectedOption] = useState([]);
 
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
-
   //API call to get get data by country AND year
   const getUsersByCountryAndYear = async (country, year) => {
-    console.log(country, year);
     const response = await fetch(`api/country/${country}/year/${year}`);
     const data = await response.json();
+    console.log(data);
 
     const yearVariable = data.Message.slice(-4);
-    const totalUsers = data.Data.internet_users_number;
-    const usersPercentage = data.Data.internet_users_percentatge;
+    const totalUsers = data.Data[country].internet_users_number;
+    const usersPercentage = data.Data[country].internet_users_percentatge;
 
-    const formattedData = {
-      name: [yearVariable],
-      total: [totalUsers],
-      percentage: [usersPercentage],
-    };
+    const formattedData = [
+      {
+        name: yearVariable,
+        total: totalUsers,
+        percentage: usersPercentage,
+      },
+    ];
     console.log(formattedData);
 
     setSelectedOption(formattedData);
+  };
+
+  const getUsersByCountry = async (country) => {
+    const response = await fetch(`api/country/${country}`);
+    const data = await response.json();
+    // console.log(data.Data);
+
+    const dataArray = Object.entries(data.Data).map(([year, values]) => ({
+      name: year,
+      total: values.internet_users_number,
+      percentage: values.internet_users_percentatge,
+    }));
+
+    //remove entries if no data
+    const cleanDataArray = dataArray.filter(
+      (entry) => entry.total && entry.percentage
+    );
+    // console.log(cleanDataArray)
+
+    setSelectedOption(cleanDataArray);
   };
 
   const onYearOptionHandler = (e) => {
@@ -87,8 +65,11 @@ export default function ChartByYearAndCountry({ countriesList }) {
   };
 
   const onButtonClick = () => {
-    console.log(selectedYear);
-    getUsersByCountryAndYear(text, selectedYear);
+    if (selectedYear) {
+      getUsersByCountryAndYear(text, selectedYear);
+    } else {
+      getUsersByCountry(text);
+    }
   };
 
   let years = [];
@@ -112,9 +93,31 @@ export default function ChartByYearAndCountry({ countriesList }) {
   };
 
   const onSuggestHandler = (suggestion) => {
-    console.log(suggestion);
+    // console.log(suggestion);
     setText(suggestion);
     setSuggestions([]);
+  };
+
+  const yAxisFormatter = (value) => {
+    return `${(value / 1000000).toFixed(0)} M`;
+  };
+
+  const customTooltipContent = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`Year: ${payload[0].payload.name}`}</p>
+          <p className="desc">{`Total Users: ${(
+            payload[0].payload.total / 1000000
+          ).toFixed(0)} M`}</p>
+          <p className="desc">{`% of Users: ${payload[0].payload.percentage.toFixed(
+            2
+          )} %`}</p>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -123,6 +126,7 @@ export default function ChartByYearAndCountry({ countriesList }) {
         <input
           type="text"
           className="col-md-12 input"
+          placeholder="Start typing country name"
           onChange={(e) => onChangeHandler(e.target.value)}
           value={text}
           onBlur={() => {
@@ -158,26 +162,31 @@ export default function ChartByYearAndCountry({ countriesList }) {
             onButtonClick();
           }}
         >
-          Search
+          Apply
         </button>
 
         <BarChart
-          width={500}
-          height={300}
-          data={data}
+          className="scatterChart"
+          width={630}
+          height={370}
+          data={selectedOption}
           margin={{
-            top: 5,
+            top: 20,
             right: 30,
             left: 20,
-            bottom: 5,
+            bottom: 20,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+          <YAxis dataKey="total" tickFormatter={yAxisFormatter} tickCount={6} />
+          <Tooltip
+            cursor={{ strokeDasharray: "3 3" }}
+            animationEasing="linear"
+            content={customTooltipContent}
+          />
           <Legend />
-          <Bar dataKey="pv" fill="#8884d8" />
+          <Bar dataKey="total" fill="#8884d8" />
         </BarChart>
       </div>
     </div>

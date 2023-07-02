@@ -89,10 +89,11 @@ function App() {
         </div>
       </section>
 
-      <section className="chartByYearAndCountry">
-        {/* {countriesList.map(country => <p>{country}</p>)} */}
+      <section className="chartByYear">
+                <div className="chartContainer">
+
         <ChartByYearAndCountry countriesList={countriesList} />
-      </section>
+     </div> </section>
     </div>
   );
 }

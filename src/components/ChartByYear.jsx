@@ -13,6 +13,7 @@ import {
 import "../App.css";
 
 export default function ChartByYear({ chartData, startYear, endYear }) {
+
   const yAxisFormatter = (value) => {
     return `${(value / 1000000).toFixed(0)} M`;
   };
