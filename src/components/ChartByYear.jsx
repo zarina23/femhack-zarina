@@ -13,7 +13,6 @@ import {
 import "../App.css";
 
 export default function ChartByYear({ chartData, startYear, endYear }) {
-
   const yAxisFormatter = (value) => {
     return `${(value / 1000000).toFixed(0)} M`;
   };
@@ -25,7 +24,7 @@ export default function ChartByYear({ chartData, startYear, endYear }) {
           <p className="label">{`${payload[0].name}: ${payload[0].value}`}</p>
           <p className="desc">{`${payload[1].name}: ${(
             payload[1].value / 1000000
-          ).toFixed(0)} M`}</p>
+          ).toFixed(1)} M`}</p>
         </div>
       );
     }

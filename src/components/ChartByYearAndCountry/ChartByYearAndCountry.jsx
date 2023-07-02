@@ -80,7 +80,7 @@ export default function ChartByYearAndCountry({ countriesList }) {
   };
 
   let years = [];
-  for (let year = 1980; year < 2021; year++) {
+  for (let year = 1990; year < 2021; year++) {
     years.push(year);
   }
 
@@ -116,7 +116,7 @@ export default function ChartByYearAndCountry({ countriesList }) {
           <p className="label">{`Year: ${payload[0].payload.name}`}</p>
           <p className="desc">{`Total Users: ${(
             payload[0].payload.total / 1000000
-          ).toFixed(0)} M`}</p>
+          ).toFixed(2)} M`}</p>
           <p className="desc">{`% of Users: ${payload[0].payload.percentage.toFixed(
             2
           )} %`}</p>
@@ -176,7 +176,7 @@ export default function ChartByYearAndCountry({ countriesList }) {
         <BarChart
           className="scatterChart"
           width={630}
-          height={370}
+          height={450}
           data={selectedOption}
           margin={{
             top: 20,
