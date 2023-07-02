@@ -1,13 +1,4 @@
 import { useState, useEffect } from "react";
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   Legend,
-// } from "recharts";
 import {
   LineChart,
   Line,
@@ -17,7 +8,6 @@ import {
   Tooltip,
   Legend,
   Dot,
-  ResponsiveContainer,
 } from "recharts";
 
 import "../../App.css";
@@ -27,7 +17,7 @@ export default function ChartTopTen({ topTenCountriesList }) {
   const [activeCountry, setActiveCountry] = useState("");
 
   useEffect(() => {
-    console.log(topTenCountriesList);
+    // console.log(topTenCountriesList);
     getData(topTenCountriesList);
   }, [topTenCountriesList]);
 
@@ -42,7 +32,7 @@ export default function ChartTopTen({ topTenCountriesList }) {
     const data = await Promise.all(
       responses.map((response) => response.json())
     );
-    console.log(data);
+    // console.log(data);
 
     const transformedData = [];
     const countries = {};
@@ -106,6 +96,11 @@ export default function ChartTopTen({ topTenCountriesList }) {
     return `${(value / 1000000).toFixed(0)} M`;
   };
 
+  const handleMouseEnter = (o) => {
+    const { dataKey } = o;
+    setOpacity({ ...opacity, [dataKey]: 0.5 });
+  };
+
   return (
     <div>
       <LineChart
@@ -119,14 +114,17 @@ export default function ChartTopTen({ topTenCountriesList }) {
       >
         <CartesianGrid sstroke="#ffffff" strokeDasharray="2 2" />
         <XAxis
+          type="number"
           dataKey="name"
+          name="Year"
           tick={{ fill: "#f3f1f5" }}
-          tickCount={4}
+          tickCount={8}
+          domain={[1990, 2020]}
           axisLine={{ stroke: "#f3f1f5" }}
         />
         <YAxis
           tickFormatter={yAxisFormatter}
-          tickCount={6}
+          tickCount={7}
           tick={{ fill: "#f3f1f5" }}
           axisLine={{ stroke: "#f3f1f5" }}
         />

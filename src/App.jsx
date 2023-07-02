@@ -2,7 +2,9 @@ import { useEffect, useState, useMemo } from "react";
 import ChartByYear from "./components/ChartByYear";
 import ChartByYearAndCountry from "./components/ChartByYearAndCountry/ChartByYearAndCountry";
 import ChartTopTen from "./components/ChartTopTen/ChartTopTen";
+import HeatGlobe from "./components/WorldMap/WorldMap";
 import "./App.css";
+import WorldMap from "./components/WorldMap/WorldMap";
 
 function App() {
   //state for first chart
@@ -14,6 +16,9 @@ function App() {
   const [countriesList, setCountriesList] = useState([]);
   //state for third chart
   const [topTenCountriesList, setTopTenCountriesList] = useState([]);
+  //state for the world map
+    const [mapData, setMapData] = useState([]);
+
 
   useEffect(() => {
     getUsersAllYears();
@@ -79,7 +84,7 @@ function App() {
     }
   };
 
-  //API call to get top 10 countries
+  //API call to get all countries for all years, set top countries, and world map data
   const getTopCountries = async (countriesList) => {
     const promiseList = [];
 
@@ -92,6 +97,25 @@ function App() {
       responses.map((response) => response.json())
     );
 
+    // console.log(data);
+
+    //set state for the world map
+    const worldMapData = data.map((item) => {
+      const yearsData = item.Data; // Object containing data for each year
+      const country = item.Message.replace("Data from country `", "").replace(
+        "`",
+        ""
+      )
+    return {
+      countryName: country,
+      internetUsers2020: yearsData[2020]?.internet_users_number,
+    };
+  })
+
+      // console.log(worldMapData);
+      setMapData(worldMapData);
+
+
     const totalByCountryArray = data.map((item) => {
       const yearsData = item.Data; // Object containing data for each year
       const country = item.Message.replace("Data from country `", "").replace(
@@ -99,7 +123,7 @@ function App() {
         ""
       ); // Extract country name
 
-      // Calculate total internet users for all years
+      // Calculate total internet users for all years for the third graph
       const totalInternetUsers = Object.values(yearsData).reduce(
         (total, yearData) => {
           return total + yearData.internet_users_number;
@@ -162,6 +186,8 @@ function App() {
           <ChartTopTen topTenCountriesList={topTenCountriesList} />
         </div>{" "}
       </section>
+
+      <WorldMap mapData={mapData} />
     </div>
   );
 }
