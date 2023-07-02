@@ -26,7 +26,7 @@
 .custom-tooltip {
   border: 1px solid #cdc2d9;
   border-radius: 5px;
-  background-color: rgba(15, 144, 254, 0.75);
+  background-color: rgba(15, 144, 254, 1);
   padding: 10px;
 
   color: #f3f1f5;

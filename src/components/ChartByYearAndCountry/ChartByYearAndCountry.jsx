@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -13,10 +13,23 @@ import "../../App.css";
 
 export default function ChartByYearAndCountry({ countriesList }) {
   const [text, setText] = useState("");
+  const [country, setCountry] = useState("Spain");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
 
   const [selectedOption, setSelectedOption] = useState([]);
+
+  useEffect(() => {
+    getUsersByCountry("Spain");
+  }, []);
+
+  const onButtonClick = () => {
+    if (selectedYear) {
+      getUsersByCountryAndYear(text, selectedYear);
+    } else {
+      getUsersByCountry(text);
+    }
+  };
 
   //API call to get get data by country AND year
   const getUsersByCountryAndYear = async (country, year) => {
@@ -38,6 +51,7 @@ export default function ChartByYearAndCountry({ countriesList }) {
     console.log(formattedData);
 
     setSelectedOption(formattedData);
+    setCountry(country);
   };
 
   const getUsersByCountry = async (country) => {
@@ -58,18 +72,11 @@ export default function ChartByYearAndCountry({ countriesList }) {
     // console.log(cleanDataArray)
 
     setSelectedOption(cleanDataArray);
+    setCountry(country);
   };
 
   const onYearOptionHandler = (e) => {
     setSelectedYear(e.target.value);
-  };
-
-  const onButtonClick = () => {
-    if (selectedYear) {
-      getUsersByCountryAndYear(text, selectedYear);
-    } else {
-      getUsersByCountry(text);
-    }
   };
 
   let years = [];
@@ -165,6 +172,7 @@ export default function ChartByYearAndCountry({ countriesList }) {
           Apply
         </button>
 
+        <h3 className="countryTitle">{country}</h3>
         <BarChart
           className="scatterChart"
           width={630}
@@ -172,21 +180,40 @@ export default function ChartByYearAndCountry({ countriesList }) {
           data={selectedOption}
           margin={{
             top: 20,
-            right: 30,
-            left: 20,
+            // right: 30,
+            // left: 20,
             bottom: 20,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis dataKey="total" tickFormatter={yAxisFormatter} tickCount={6} />
+          <CartesianGrid stroke="#ffffff" strokeDasharray="2 2" />
+          <XAxis
+            dataKey="name"
+            tick={{ fill: "#f3f1f5" }}
+            axisLine={{ stroke: "#f3f1f5" }}
+          />
+          <YAxis
+            dataKey="total"
+            tickFormatter={yAxisFormatter}
+            tickCount={6}
+            tick={{ fill: "#f3f1f5" }}
+            axisLine={{ stroke: "#f3f1f5" }}
+          />
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             animationEasing="linear"
             content={customTooltipContent}
           />
-          <Legend />
-          <Bar dataKey="total" fill="#8884d8" />
+          <Legend
+            fill="#0f90fe"
+            opacity={1}
+            wrapperStyle={{ lineHeight: "30px" }}
+          />
+          <Bar
+            name="Total Internet Users"
+            dataKey="total"
+            fill="#0f90fe"
+            opacity={0.9}
+          />
         </BarChart>
       </div>
     </div>

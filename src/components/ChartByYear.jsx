@@ -40,8 +40,8 @@ export default function ChartByYear({ chartData, startYear, endYear }) {
       height={370}
       margin={{
         top: 20,
-        right: 30,
-        left: 20,
+        // right: 30,
+        // left: 20,
         bottom: 20,
       }}
     >
@@ -80,7 +80,7 @@ export default function ChartByYear({ chartData, startYear, endYear }) {
         wrapperStyle={{ lineHeight: "30px" }}
       />
       <Scatter
-        name="Total Users Worldwide"
+        name="Total Internet Users"
         data={chartData}
         fill="#0f90fe"
         opacity={0.9}
