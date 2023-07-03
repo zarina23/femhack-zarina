@@ -113,10 +113,11 @@ function App() {
       responses.map((response) => response.json())
     );
 
-    // console.log(data);
+    console.log(data);
 
     //set state for the world map
     const worldMapData = data.map((item) => {
+
       const yearsData = item.Data; // Object containing data for each year
       const country = item.Message.replace("Data from country `", "").replace(
         "`",
@@ -124,7 +125,7 @@ function App() {
       )
     return {
       countryName: country,
-      internetUsers2020: yearsData[2020]?.internet_users_number,
+      internetUsers2020: yearsData[2020]?.internet_users_percentatge,
     };
   })
 
@@ -208,6 +209,7 @@ function App() {
           <WorldMap mapData={mapData} minAndMaxArray={minAndMaxArray} />
         </div>{" "}
       </section>
+
     </div>
   );
 }

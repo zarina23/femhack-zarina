@@ -10,6 +10,8 @@ import {
   ZoomableGroup,
 } from "react-simple-maps";
 import lookup_table from "../../../public/lookup_table.json";
+import "../../App.css";
+import "./WorldMap.css"
 
 const WorldMap = ({ mapData, minAndMaxArray }) => {
   const geoUrl = "../../../public/features.json";
@@ -21,6 +23,15 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
 
     const showTooltip = (countryDetails) => {
       console.log(countryDetails)
+
+      // return (
+      //   <div className="custom-tooltip tooltip">
+      //     <p className="label tooltiptext">{`${countryDetails.countryName}`}</p>
+      //     <p className="desc">{`Number of Internet Users: ${(
+      //       countryDetails.internetUsers2020 / 1000000
+      //     ).toFixed(2)} M`}</p>
+      //   </div>
+      // );
     }
   return (
     <ComposableMap
@@ -52,7 +63,7 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
                     hover: { fill: "#041145" },
                     pressed: { fill: "rgba(15, 144, 254, 1)" },
                   }}
-                  onMouseEnter={()=>showTooltip(extractedCountryDetails)}
+                  onMouseEnter={()=>showTooltip(geo)}
                 />
               );
             })
@@ -60,6 +71,8 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
         </Geographies>
       )}
     </ComposableMap>
+
+    
   );
 };
 
