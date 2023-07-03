@@ -8,8 +8,15 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import Select from "@mui/material/Select";
+import Button from "@mui/material/Button";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
 import "./ChartByYearAndCountry.css";
 import "../../App.css";
+import { TextField } from "@mui/material";
 
 export default function ChartByYearAndCountry({ countriesList }) {
   const [text, setText] = useState("");
@@ -130,47 +137,60 @@ export default function ChartByYearAndCountry({ countriesList }) {
   return (
     <div>
       <div className="container">
-        <input
-          type="text"
-          className="col-md-12 input"
-          placeholder="Start typing country name"
-          onChange={(e) => onChangeHandler(e.target.value)}
-          value={text}
-          onBlur={() => {
-            setTimeout(() => {
-              setSuggestions([]);
-            }, 200);
-          }}
-        />
-        {suggestions &&
-          suggestions.map((suggestion, i) => (
-            <div
-              key={i}
-              className="suggestion col-md-12 justify-content-md-center"
-              onClick={() => onSuggestHandler(suggestion)}
-            >
-              {suggestion}
-            </div>
-          ))}
+        <div className="formcontrol">
+          <div className="inputSuggest">
+            <TextField
+              type="text"
+              className="col-md-12 input"
+              placeholder="Start typing country name"
+              onChange={(e) => onChangeHandler(e.target.value)}
+              value={text}
+              onBlur={() => {
+                setTimeout(() => {
+                  setSuggestions([]);
+                }, 200);
+              }}
+            />
+            {suggestions &&
+              suggestions.map((suggestion, i) => (
+                <div
+                  key={i}
+                  className="suggestion col-md-12 justify-content-md-center"
+                  onClick={() => onSuggestHandler(suggestion)}
+                >
+                  {suggestion}
+                </div>
+              ))}
+          </div>
 
-        <select onChange={(e) => onYearOptionHandler(e)}>
-          <option placeholder="Year"></option>
-          {years.map((year, i) => {
-            return (
-              <option key={`year${i}`} value={year}>
-                {year}
-              </option>
-            );
-          })}
-        </select>
-
-        <button
+          {/* <InputLabel id="demo-simple-select-helper-label">Year</InputLabel> */}
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            label="Year"
+            autoWidth
+            className="select"
+            onChange={(e) => onYearOptionHandler(e)}
+          >
+            <option placeholder="Year"></option>
+            {years.map((year, i) => {
+              return (
+                <MenuItem key={`year${i}`} value={year}>
+                  {year}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </div>
+        <Button
+          variant="contained"
+          color="info"
           onClick={() => {
             onButtonClick();
           }}
         >
           Apply
-        </button>
+        </Button>
 
         <h3 className="countryTitle">{country}</h3>
         <BarChart

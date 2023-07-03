@@ -3,6 +3,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  background-image: url(./assets/bg-photo.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  background-position: center;
 }
 
 /* ChartByYear Component */
