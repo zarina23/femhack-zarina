@@ -9,30 +9,30 @@ import {
   Graticule,
   ZoomableGroup,
 } from "react-simple-maps";
+import Tooltip from "@mui/material/Tooltip";
 import lookup_table from "../../../public/lookup_table.json";
 import "../../App.css";
-import "./WorldMap.css"
+import "./WorldMap.css";
 
 const WorldMap = ({ mapData, minAndMaxArray }) => {
   const geoUrl = "../../../public/features.json";
 
   const colorScale = scaleLinear()
     .domain(minAndMaxArray)
-    .range(["rgb(189, 224, 255)", "#2B6FB5"]);
+    .range(["#a6caef", "#0263c4"]);
 
+  const showTooltip = (countryDetails) => {
+    console.log(countryDetails);
 
-    const showTooltip = (countryDetails) => {
-      console.log(countryDetails)
-
-      // return (
-      //   <div className="custom-tooltip tooltip">
-      //     <p className="label tooltiptext">{`${countryDetails.countryName}`}</p>
-      //     <p className="desc">{`Number of Internet Users: ${(
-      //       countryDetails.internetUsers2020 / 1000000
-      //     ).toFixed(2)} M`}</p>
-      //   </div>
-      // );
-    }
+    return (
+      <div className="custom-tooltip tooltip">
+        <p className="label tooltiptext">{`${countryDetails?.countryName}`}</p>
+        <p className="desc">{`Number of Internet Users: ${(
+          countryDetails?.internetUsers2020 / 1000000
+        ).toFixed(2)} M`}</p>
+      </div>
+    );
+  };
   return (
     <ComposableMap
       projectionConfig={{
@@ -51,28 +51,37 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
                   lookup_table[countryDetails.countryName] === geo.id
               );
               return (
-                <Geography
+                <Tooltip
                   key={geo.rsmKey}
-                  geography={geo}
-                  style={{
-                    default: {
-                      fill: extractedCountryDetails
-                        ? colorScale(extractedCountryDetails.internetUsers2020)
-                        : "#F5F4F6",
-                    },
-                    hover: { fill: "#041145" },
-                    pressed: { fill: "rgba(15, 144, 254, 1)" },
-                  }}
-                  onMouseEnter={()=>showTooltip(geo)}
-                />
+                  title={`${
+                    extractedCountryDetails?.countryName
+                  }, % of users: ${extractedCountryDetails?.internetUsers2020.toFixed(
+                    1
+                  )}%`}
+                >
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    style={{
+                      default: {
+                        fill: extractedCountryDetails
+                          ? colorScale(
+                              extractedCountryDetails.internetUsers2020
+                            )
+                          : "#F5F4F6",
+                      },
+                      hover: { fill: "#041145" },
+                      pressed: { fill: "rgba(15, 144, 254, 1)" },
+                    }}
+                    onMouseEnter={() => showTooltip(geo)}
+                  />
+                </Tooltip>
               );
             })
           }
         </Geographies>
       )}
     </ComposableMap>
-
-    
   );
 };
 
