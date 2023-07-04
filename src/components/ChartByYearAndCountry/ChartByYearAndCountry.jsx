@@ -170,9 +170,10 @@ export default function ChartByYearAndCountry({ countriesList }) {
             labelId="demo-simple-select-helper-label"
             id="demo-simple-select-helper"
             label="Year"
-            autoWidth
+            // autoWidth
             className="select"
             onChange={(e) => onYearOptionHandler(e)}
+            placeholder="year"
           >
             <option placeholder="Year"></option>
             {years.map((year, i) => {
