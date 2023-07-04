@@ -16,7 +16,9 @@
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
+
 }
+
 
 .chartContainer {
   background-color: #262626;
@@ -30,12 +32,11 @@
 .mapContainer {
   background-color: #262626;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 85vw;
   padding: 40px;
   color: #a6caef;
 }
-
 
 .custom-tooltip {
   border: 1px solid #cdc2d9;

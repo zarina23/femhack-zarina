@@ -201,15 +201,17 @@ function App() {
       <section className="chartByYear">
         <div className="chartContainer">
           <ChartTopTen topTenCountriesList={topTenCountriesList} />
-        </div>{" "}
+        </div>
       </section>
 
-      <section className="chartByYear">
+      <section className="chartByYear map">
         <div className="mapContainer">
+          <h3 className="chartTitle">
+            Internet Users Worldwide - Heat Map Year 2020
+          </h3>
           <WorldMap mapData={mapData} minAndMaxArray={minAndMaxArray} />
-        </div>{" "}
+        </div>
       </section>
-
     </div>
   );
 }

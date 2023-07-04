@@ -39,8 +39,8 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
         rotate: [-10, 0, 0],
         scale: 140,
       }}
+      className="mapContainer"
     >
-
       <Sphere stroke="#f3f1f5" strokeWidth={0.5} />
       <Graticule stroke="#f3f1f5" strokeWidth={0.5} />
       {mapData.length > 0 && (
