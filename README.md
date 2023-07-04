@@ -12,6 +12,18 @@ The `femhack-solution` package is a solution developed for the FemHack coding ch
 
 ![Worldwide users historical data](./src/assets/worldwide.gif)
 
+### Internet Users By Country
+
+![Worldwide users historical data](./src/assets/by_country.gif)
+
+### Internet Users - Top 10 Countries
+
+![Worldwide users historical data](./src/assets/top_ten.gif)
+
+### Internet Users Worldwide - Heat Map
+
+![Worldwide users historical data](./src/assets/heat_map.gif)
+
 ## Installation
 
 To install and use the `femhack-solution` package, you need to have Node.js installed on your machine. Follow these steps:
