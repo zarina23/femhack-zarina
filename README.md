@@ -6,6 +6,11 @@ This is the README file for the `femhack-solution` package.
 
 The `femhack-solution` package is a solution developed for the FemHack coding challenge. It is a web application built using React and various related libraries. The application includes visualizations using D3, interactive maps with Leaflet, and charts with Recharts. It also utilizes the Material-UI library for styling.
 
+## Screen captures
+
+Internet Users Worldwide Chart
+![Worldwide users historical data](./src/assets/worldwide.gif)
+
 ## Installation
 
 To install and use the `femhack-solution` package, you need to have Node.js installed on your machine. Follow these steps:
