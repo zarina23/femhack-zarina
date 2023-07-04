@@ -8,7 +8,8 @@ The `femhack-solution` package is a solution developed for the FemHack coding ch
 
 ## Screen captures
 
-Internet Users Worldwide Chart
+### Internet Users Worldwide Chart
+
 ![Worldwide users historical data](./src/assets/worldwide.gif)
 
 ## Installation
