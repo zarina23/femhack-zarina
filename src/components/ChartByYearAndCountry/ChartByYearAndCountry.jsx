@@ -136,6 +136,8 @@ export default function ChartByYearAndCountry({ countriesList }) {
 
   return (
     <div>
+      <h3 className="chartTitle">Internet Users - By Country</h3>
+
       <div className="container">
         <div className="formcontrol">
           <div className="inputSuggest">

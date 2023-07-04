@@ -40,6 +40,7 @@ const WorldMap = ({ mapData, minAndMaxArray }) => {
         scale: 140,
       }}
     >
+
       <Sphere stroke="#f3f1f5" strokeWidth={0.5} />
       <Graticule stroke="#f3f1f5" strokeWidth={0.5} />
       {mapData.length > 0 && (

@@ -103,6 +103,8 @@ export default function ChartTopTen({ topTenCountriesList }) {
 
   return (
     <div>
+      <h3 className="chartTitle">Internet Users Per Year - Top 10 Countries</h3>
+
       <LineChart
         width={750}
         height={400}
